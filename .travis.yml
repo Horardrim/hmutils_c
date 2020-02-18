@@ -1,0 +1,14 @@
+matrix:
+  include:
+    - language: c
+      
+      before_install:
+        - sudo apt-get install -y valgrind
+        - export HMUTILS_C_VERSION=`grep "define HMUTILS_C_VERSION" main/version.h | awk -F "\"" '{print $2}'`
+      script:
+        - make cov
+        - make test
+        - make gencov
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+        - echo "VERSION: $HMUTILS_C_VERSION"
